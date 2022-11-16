@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
 
 @Directive({
   selector: '[cambioEnlaces]'
@@ -6,20 +6,28 @@ import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core'
 export class DirectivaPersonalizadaDirective {
 
   @HostBinding('class.estilo1') private ishovering!: boolean;
-  private cadena:String;
+  
+  @Input('cambioEnlaces') datos={
+    texto:"No metiste texto",
+    color:"rojo"
+  }
+
+  private cadenatxtAnterior:String;
   constructor(private el: ElementRef) { 
-    this.cadena="";
+    this.cadenatxtAnterior="";
   }
 
   @HostListener('mouseover') ratonPasa(){
-    this.cadena=this.el.nativeElement.innerHTML;
-    this.el.nativeElement.innerHTML=this.el.nativeElement.innerHTML.toUpperCase();
+    this.cadenatxtAnterior=this.el.nativeElement.innerHTML;
+    this.el.nativeElement.innerHTML=this.datos.texto.toUpperCase();
+    this.el.nativeElement.className=this.datos.color;
     this.ishovering=true;
     
   }
 
   @HostListener('mouseout') ratonSale(){
     this.ishovering=false;
-    this.el.nativeElement.innerHTML=this.cadena;
+    this.el.nativeElement.innerHTML=this.cadenatxtAnterior;
+    this.el.nativeElement.className="";
   }
 }
